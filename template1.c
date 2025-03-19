@@ -62,6 +62,10 @@ void RemoveAllRobotPackages()
 
 }
 
+void tuPutaMadre(){
+  printf("Me cago en tu puta madre");
+}
+
 //----------------------------------------------------------Packages -> different Stacks
 // WARNING: do not change this function
 struct Package * GeneratePackage()
