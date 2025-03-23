@@ -21,6 +21,11 @@ enum EventType GenerateEventType()
 void CheckArguments (int argc, char ** argv)
 {
 	// check the input introduced by the user
+	if (argc != 2){
+		printf("Incorrect arguments. You have to introduce the number of events like this: program 'Number of arguments'\n");
+	}
+
+	
 }
 
 //----------------------------------------------------------RobotPackages -> Sorted list
