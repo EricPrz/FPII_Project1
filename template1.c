@@ -25,7 +25,6 @@ void CheckArguments (int argc, char ** argv)
 		printf("Incorrect arguments. You have to introduce the number of events like this: program 'Number of arguments'\n");
 	}
 
-	
 }
 
 //----------------------------------------------------------RobotPackages -> Sorted list
@@ -46,7 +45,11 @@ struct RobotPackage * GenerateRobotPackage()
 // function to print a list of RobotPackages
 void PrintRobotPackages()
 {
-	
+  struct RobotPackage* current = RobotPackagesHead;
+  while(current != NULL){
+    printf("Supplier: %s\nYear: %d\nID: %s\n", current->supplier, current->year, current->id);
+    current = current->next;
+  }
 }
 
 // function to search for a RobotPackage
@@ -58,13 +61,34 @@ struct RobotPackage * SearchRobotPackage(/*...*/)
 // function to simulate an insertion of RobotPackages in a ordered way (sorted by supplier)
 void SimulateManagingRobotPackages(struct RobotPackage * RobotPackage)
 {
+  struct RobotPackage *current = RobotPackagesHead;
+
+  if (current == NULL){
+    RobotPackagesHead = RobotPackage;
+    return;
+  }
+
+  // While the RobotPackage to insert supplier is lexicosemantically smaller than the current RobotPackage, select the next one.
+  while (strcmp(RobotPackage->supplier, current->next.supplier) < 0){
+    current = current->next;
+  }
+
+  RobotPackage->next = current->next;
+  current->next = RobotPackage;
 
 }
 
 // function to remove all the RobotPackages from the list at the end of the program
 void RemoveAllRobotPackages()
 {
-
+  struct RobotPackage *current = RobotPackagesHead;
+  struct RobotPackage *next = current->next;
+  while(next != NULL){
+    free(current);
+    current = next;
+    next = current->next;
+  }
+  free(current);
 }
 
 //----------------------------------------------------------Packages -> different Stacks
@@ -108,7 +132,19 @@ void SimulateClassifyPackage(struct Package * Package)
 // function to clean all stacks before the end of the program
 void CleanPackageStacks()
 {
+   //For every stack
+  for (int i = 0; i < NUMBER_OF_STACK; i++){
+    struct Package *currentPackage = Top_ofPackageStacks[i];
+    struct Package *nextPackage = currentPackage->next;
 
+    while(nextPackage != NULL){
+      free(currentPackage);
+      currentPackage = nextPackage;
+      nextPackage = currentPackage->next;
+    }
+
+    free(currentPackage);
+  }
 }
 
 //----------------------------------------------------------Shopping -> Queue
@@ -194,6 +230,8 @@ int main (int argc, char ** argv)
 	int EventNumbers;
 	printf ("Starting... \n");
 	CheckArguments(argc, argv);
+  EventNumbers = atoi(argv[1]);
+  printf("There will be %d EventNumbers.\n", EventNumbers);
 	
 	// initialize EventNumbers 
 
